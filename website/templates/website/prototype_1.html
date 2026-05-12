@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --g:#1db983;--gd:#169a6b;--g-dim:rgba(29,185,131,0.10);--g-border:rgba(29,185,131,0.25);
+      --bg:#08111e;--bg2:#0d1928;--bg3:#112032;
+      --surf:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.09);
+      --text:#dde4ec;--muted:rgba(221,228,236,0.60);--dim:rgba(221,228,236,0.38);
+      --display:'Syne',sans-serif;--body:'DM Sans',sans-serif;
+      --r4:4px;--r8:8px;--r12:12px;--r20:20px;--max:1300px;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    #progress{position:fixed;top:0;left:0;height:2px;background:var(--g);z-index:200;transition:width .1s}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:70px;background:rgba(8,17,30,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .logo{font-family:var(--display);font-weight:800;font-size:17px;color:#fff;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase}
+    .logo em{color:var(--g);font-style:normal}
+    .logo-sub{display:block;font-size:8px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);font-weight:500;margin-top:1px}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-size:11px;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;transition:color .2s}
+    .nav-links a:hover{color:#fff}
+    .nav-btn{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--g);padding:10px 22px;border-radius:var(--r4);text-decoration:none;transition:background .2s;box-shadow:0 4px 16px rgba(29,185,131,0.25)}
+    .nav-btn:hover{background:var(--gd)}
+    /* ── CINEMATIC SPLIT HERO ── */
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:70px;position:relative;overflow:hidden}
+    .hero-video-half{position:relative;overflow:hidden}
+    .hero-video-half video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .hero-video-half::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,17,30,0.1) 0%,rgba(8,17,30,0.55) 100%),linear-gradient(to bottom,rgba(8,17,30,0.3) 0%,transparent 40%,rgba(8,17,30,0.4) 100%)}
+    .hero-video-label{position:absolute;bottom:24px;left:24px;z-index:3;font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:8px}
+    .hero-video-label::before{content:'';width:20px;height:1px;background:var(--g)}
+    .hero-text-half{display:flex;flex-direction:column;justify-content:center;padding:80px 60px 80px 52px;background:var(--bg);position:relative}
+    .hero-text-half::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--g-border),transparent)}
+    .hero-bg{display:none}
+    .hero-grid-bg{display:none}
+    .hero-content{position:relative;z-index:2;animation:fadeUp .8s ease both}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:600;color:var(--g);letter-spacing:0.15em;text-transform:uppercase;border:1px solid var(--g-border);padding:6px 14px;border-radius:999px;margin-bottom:32px;background:var(--g-dim)}
+    .hero-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--g);flex-shrink:0}
+    .hero h1{font-family:var(--display);font-size:clamp(46px,4.8vw,72px);font-weight:800;line-height:1.04;color:#fff;letter-spacing:-0.02em;margin-bottom:22px;text-wrap:balance}
+    .hero h1 em{color:var(--g);font-style:normal}
+    .hero-sub{font-size:15px;color:var(--muted);line-height:1.8;max-width:500px;margin-bottom:40px}
+    .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+    .btn-p{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--bg);background:var(--g);padding:14px 28px;border-radius:var(--r4);text-decoration:none;transition:background .2s,transform .2s;box-shadow:0 6px 20px rgba(29,185,131,0.28)}
+    .btn-p:hover{background:var(--gd);transform:translateY(-1px)}
+    .btn-g{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);border:1px solid rgba(255,255,255,0.18);padding:14px 28px;border-radius:var(--r4);text-decoration:none;transition:all .2s}
+    .btn-g:hover{color:#fff;border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);transform:translateY(-1px)}
+    .hero-right{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px;animation:fadeUp .8s .12s ease both}
+    .stat-big{background:linear-gradient(145deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));border:1px solid var(--border);border-radius:var(--r12);padding:28px 32px;backdrop-filter:blur(8px)}
+    .stat-big-num{font-family:var(--display);font-size:52px;font-weight:800;color:#fff;line-height:1}
+    .stat-big-num em{color:var(--g);font-style:normal}
+    .stat-big-lbl{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:8px}
+    .stat-row{display:flex;gap:14px}
+    .stat-sm{flex:1;background:linear-gradient(145deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015));border:1px solid var(--border);border-radius:var(--r12);padding:22px 20px;backdrop-filter:blur(8px)}
+    .stat-sm-num{font-family:var(--display);font-size:36px;font-weight:800;color:#fff;line-height:1}
+    .stat-sm-num em{color:var(--g);font-style:normal}
+    .stat-sm-lbl{font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:6px}
+    .certif{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px solid var(--g-border);border-radius:var(--r8);background:var(--g-dim)}
+    .certif-dot{width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0;box-shadow:0 0 8px var(--g)}
+    .certif-text{font-size:12px;color:var(--muted)}
+    .certif-text strong{color:#fff}
+    .ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:13px 0;background:var(--bg2)}
+    .ticker-track{display:flex;gap:48px;white-space:nowrap;animation:scroll 36s linear infinite}
+    .t-item{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+    .t-dot{width:4px;height:4px;border-radius:50%;background:var(--g);flex-shrink:0}
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .section{padding:100px 64px;max-width:var(--max);margin:0 auto}
+    .s-label{display:inline-flex;align-items:center;gap:10px;font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--g);margin-bottom:16px}
+    .s-label::before{content:'';width:22px;height:1px;background:var(--g)}
+    .s-title{font-family:var(--display);font-size:clamp(32px,3.2vw,50px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.015em;margin-bottom:16px;text-wrap:balance}
+    .s-sub{font-size:15px;color:var(--muted);line-height:1.8;max-width:540px;margin-bottom:56px}
+    #services{background:var(--bg2)}
+    .srv-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;gap:24px}
+    .srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r20);overflow:hidden;border:1px solid var(--border)}
+    .srv-card{background:var(--bg2);padding:36px 32px;position:relative;overflow:hidden;transition:background .25s}
+    .srv-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--g);transition:width .35s ease}
+    .srv-card:hover{background:linear-gradient(160deg,rgba(29,185,131,0.07),rgba(29,185,131,0.02))}
+    .srv-card:hover::after{width:100%}
+    .srv-num{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:0.14em;color:var(--g);margin-bottom:20px}
+    .srv-card h3{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:10px}
+    .srv-card p{font-size:13px;color:var(--muted);line-height:1.75}
+    .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .proj-card{border-radius:var(--r12);overflow:hidden;border:1px solid var(--border);background:var(--surf);transition:border-color .25s,transform .25s,box-shadow .25s}
+    .proj-card:hover{border-color:var(--g-border);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.3)}
+    .proj-img{height:210px;position:relative;display:flex;align-items:flex-end;padding:20px}
+    .proj-img::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:24px 24px}
+    .pi-a{background:linear-gradient(135deg,#0e2a3d 0%,#15445e 100%)}
+    .pi-b{background:linear-gradient(135deg,#0e2238 0%,#173862 100%)}
+    .pi-c{background:linear-gradient(135deg,#0e3028 0%,#145040 100%)}
+    .pi-d{background:linear-gradient(135deg,#1a2830 0%,#204050 100%)}
+    .proj-tag{position:relative;z-index:1;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--g);background:var(--g-dim);border:1px solid var(--g-border);padding:4px 10px;border-radius:2px}
+    .proj-info{padding:22px 24px;border-top:1px solid var(--border)}
+    .proj-info h4{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;margin-bottom:6px}
+    .proj-info p{font-size:12px;color:var(--muted)}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .testi-card{background:linear-gradient(145deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid var(--border);border-radius:var(--r12);padding:30px 28px;transition:border-color .25s}
+    .testi-card:hover{border-color:var(--g-border)}
+    .testi-quote{font-size:32px;color:var(--g);line-height:1;margin-bottom:14px;font-family:Georgia,serif}
+    .testi-card p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:22px;font-style:italic}
+    .testi-author{display:flex;align-items:center;gap:12px}
+    .testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--g-dim);border:1px solid var(--g-border);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;color:var(--g);flex-shrink:0}
+    .testi-name{font-family:var(--display);font-size:13px;font-weight:700;color:#fff}
+    .testi-role{font-size:11px;color:var(--dim)}
+    .about-wrap{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .about-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:100px 64px;max-width:var(--max);margin:0 auto}
+    .about-desc{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:32px}
+    .values{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+    .val{border-left:2px solid var(--g);padding-left:14px}
+    .val strong{display:block;font-family:var(--display);font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+    .val span{font-size:12px;color:var(--muted)}
+    .stats-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .stat-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r12);padding:28px 24px;transition:border-color .2s}
+    .stat-card:hover{border-color:var(--g-border)}
+    .stat-n{font-family:var(--display);font-size:44px;font-weight:800;color:#fff;line-height:1}
+    .stat-n em{color:var(--g);font-style:normal}
+    .stat-l{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:8px}
+    .cta-wrap{background:var(--bg2);border-top:1px solid var(--border)}
+    .cta-inner{max-width:680px;margin:0 auto;text-align:center;padding:110px 64px}
+    .cta-inner p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:40px}
+    .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    /* Contact form */
+    .contact-form{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--r12);padding:36px;margin-top:40px;text-align:left;max-width:600px;margin-left:auto;margin-right:auto}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .form-group label{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+    .form-input,.form-select,.form-textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--r4);padding:11px 14px;font-size:13px;color:#fff;font-family:var(--body);transition:border-color .2s;width:100%}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--g)}
+    .form-textarea{resize:vertical}
+    .form-select option{background:#0d1928}
+    .btn-submit{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--bg);background:var(--g);padding:14px 28px;border:none;border-radius:var(--r4);cursor:pointer;transition:background .2s;box-shadow:0 6px 20px rgba(29,185,131,0.28);width:100%;margin-top:8px}
+    .btn-submit:hover{background:var(--gd)}
+    .errorlist{list-style:none;font-size:12px;color:#f87171;margin-top:4px}
+    footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 32px;max-width:var(--max);margin:0 auto}
+    .ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .ft-desc{font-size:13px;color:var(--muted);line-height:1.8;max-width:260px;margin-top:12px}
+    .ft-col h4{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#fff;margin-bottom:18px}
+    .ft-col ul{list-style:none}
+    .ft-col li{margin-bottom:10px}
+    .ft-col a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+    .ft-col a:hover{color:var(--g)}
+    .ft-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px}
+    .ft-bottom p{font-size:12px;color:var(--dim)}
+    .ft-green{color:var(--g)}
+    .back-link{position:fixed;bottom:24px;right:24px;z-index:99;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);background:var(--bg2);border:1px solid var(--border);padding:9px 16px;border-radius:var(--r4);text-decoration:none;transition:all .2s}
+    .back-link:hover{color:#fff;border-color:rgba(255,255,255,0.25)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:1024px){nav{padding:0 32px}.hero{grid-template-columns:1fr}.hero-video-half{min-height:46vh}.hero-text-half{padding:48px 32px 64px}.section{padding:72px 32px}.srv-grid{grid-template-columns:1fr 1fr}.proj-grid{grid-template-columns:1fr}.testi-grid{grid-template-columns:1fr}.about-inner{grid-template-columns:1fr;padding:72px 32px}.ft-top{grid-template-columns:1fr 1fr}footer{padding:48px 32px 24px}.cta-inner{padding:80px 32px}}
+    @media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-btn{display:none}.hero{padding:90px 20px 48px}.section{padding:56px 20px}.srv-grid{grid-template-columns:1fr}.stats-panel{grid-template-columns:1fr 1fr}.ft-top{grid-template-columns:1fr}footer{padding:40px 20px 20px}.ft-bottom{flex-direction:column;gap:10px;text-align:center}.cta-inner{padding:60px 20px}.form-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+{% csrf_token %}
+<div id="progress"></div>
+
+<nav>
+  <a class="logo" href="{% url 'index' %}">STRUQ<em>T</em>ON<span class="logo-sub">STRUCTURAL</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#testimonials">Clients</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-btn" href="#contact">Get a Quote</a>
+</nav>
+
+<div class="hero">
+  <!-- LEFT: Drone video -->
+  <div class="hero-video-half">
+    <video autoplay muted loop playsinline>
+      <source src="{% static 'website/media/DJI_20260508141241_0002_D.MP4' %}" type="video/mp4">
+    </video>
+    <div class="hero-video-label">Aerial site footage · Zimbabwe</div>
+  </div>
+
+  <!-- RIGHT: Text content -->
+  <div class="hero-text-half">
+    <div class="hero-content">
+      <div class="hero-tag">Structural Engineering · Zimbabwe</div>
+      <h1>Engineering the<br><em>Future</em> of Zimbabwe's<br>Skyline.</h1>
+      <p class="hero-sub">{{ site.company_name }} delivers precise, code-compliant engineering solutions for residential, commercial, and industrial projects. From foundation to frame — engineered right, every time.</p>
+      <div class="hero-btns">
+        <a class="btn-p" href="#services">Our Services →</a>
+        <a class="btn-g" href="#projects">View Projects</a>
+      </div>
+    </div>
+    <div class="hero-right" style="margin-top:36px">
+      <div class="stat-big">
+        <div class="stat-big-num">{{ site.stats.projects }}<em>+</em></div>
+        <div class="stat-big-lbl">Projects completed across Zimbabwe</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-sm">
+          <div class="stat-sm-num">{{ site.stats.years }}<em></em></div>
+          <div class="stat-sm-lbl">Years of expertise</div>
+        </div>
+        <div class="stat-sm">
+          <div class="stat-sm-num">{{ site.stats.on_spec }}<em></em></div>
+          <div class="stat-sm-lbl">On-spec delivery</div>
+        </div>
+      </div>
+      <div class="certif">
+        <div class="certif-dot"></div>
+        <div class="certif-text"><strong>Registered Engineers</strong> — Compliant with Zimbabwe Building Codes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    {% for service in site.services %}<div class="t-item"><div class="t-dot"></div>{{ service.name }}</div>{% endfor %}
+    {% for service in site.services %}<div class="t-item"><div class="t-dot"></div>{{ service.name }}</div>{% endfor %}
+  </div>
+</div>
+
+<section class="section" id="services" style="background:var(--bg2);max-width:100%;padding:100px 0">
+  <div style="max-width:var(--max);margin:0 auto;padding:0 64px">
+    <div class="srv-head">
+      <div>
+        <div class="s-label">What we do</div>
+        <div class="s-title">Core services</div>
+        <p class="s-sub" style="margin-bottom:0">End-to-end structural engineering from initial concept through site completion.</p>
+      </div>
+      <a class="btn-g" href="#contact" style="white-space:nowrap;flex-shrink:0">Request a service →</a>
+    </div>
+    <div class="srv-grid">
+      {% for service in site.services %}
+      <div class="srv-card">
+        <div class="srv-num">{{ service.number }}</div>
+        <h3>{{ service.name }}</h3>
+        <p>{{ service.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="s-label">Our work</div>
+  <div class="s-title">Featured projects</div>
+  <p class="s-sub">A selection of recent work across residential, commercial, and industrial sectors in Zimbabwe.</p>
+  <div class="proj-grid">
+    {% for project in site.projects %}
+    <div class="proj-card">
+      {% if forloop.first %}
+      <div class="proj-img" style="position:relative;padding:0">
+        <img src="{% static 'website/media/DJI_20260508142308_0014_D.JPG' %}" alt="Aerial project site view" style="width:100%;height:100%;object-fit:cover;display:block">
+        <span class="proj-tag" style="position:absolute;bottom:16px;left:16px;z-index:2">{{ project.category }}</span>
+      </div>
+    {% else %}
+      <div class="proj-img {{ project.color_class }}"><span class="proj-tag">{{ project.category }}</span></div>
+    {% endif %}
+      <div class="proj-info">
+        <h4>{{ project.title }}</h4>
+        <p>{{ project.services }} · {{ project.year }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div style="text-align:center;margin-top:48px"><a class="btn-g" href="#contact">Discuss your project →</a></div>
+</section>
+
+<section class="section" id="testimonials" style="background:var(--bg2);max-width:100%;padding:100px 0">
+  <div style="max-width:var(--max);margin:0 auto;padding:0 64px">
+    <div class="s-label">Client feedback</div>
+    <div class="s-title">Trusted by developers across Zimbabwe</div>
+    <div class="testi-grid">
+      {% for t in site.testimonials %}
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p>{{ t.quote }}</p>
+        <div class="testi-author">
+          <div class="testi-avatar">{{ t.initials }}</div>
+          <div><div class="testi-name">{{ t.name }}</div><div class="testi-role">{{ t.role }}</div></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="about-wrap" id="about">
+  <div class="about-inner">
+    <div>
+      <div class="s-label">About us</div>
+      <div class="s-title">Engineering you can trust</div>
+      <p class="about-desc">Based in the heart of Harare, {{ site.company_name }} is a premier engineering firm dedicated to building a safer, stronger Zimbabwe. We specialise in innovative structural solutions across the residential, commercial, and industrial sectors, blending deep local knowledge with global engineering standards.</p>
+      <a class="btn-p" href="#contact">Work with us →</a>
+      <div class="values">
+        <div class="val"><strong>Precision</strong><span>Every calculation checked and verified</span></div>
+        <div class="val"><strong>Integrity</strong><span>Honest assessments, no shortcuts</span></div>
+        <div class="val"><strong>Speed</strong><span>Responsive turnarounds without compromise</span></div>
+        <div class="val"><strong>Compliance</strong><span>Fully aligned with local building codes</span></div>
+      </div>
+    </div>
+    <div class="stats-panel">
+      <div class="stat-card"><div class="stat-n">{{ site.stats.projects }}</div><div class="stat-l">Projects completed</div></div>
+      <div class="stat-card"><div class="stat-n">{{ site.stats.years }}</div><div class="stat-l">Years of practice</div></div>
+      <div class="stat-card"><div class="stat-n">{{ site.stats.provinces }}</div><div class="stat-l">Provinces covered</div></div>
+      <div class="stat-card"><div class="stat-n">{{ site.stats.on_spec }}</div><div class="stat-l">On-spec delivery</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-wrap" id="contact">
+  <div class="cta-inner">
+    <div class="s-label" style="justify-content:center">Get in touch</div>
+    <div class="s-title">Ready to start your project?</div>
+    <p>Whether you need a structural report, full design package, or just want to discuss a project — we're ready to help. Get in touch and we'll respond within 24 hours.</p>
+    <div class="cta-btns">
+      <a class="btn-p" href="mailto:{{ site.email }}">Send us an email →</a>
+      <a class="btn-g" href="tel:{{ site.phone }}">Call us</a>
+    </div>
+    <div class="contact-form">
+      <form method="post" action="{% url 'contact_submit' %}">
+        {% csrf_token %}
+        <input type="hidden" name="source_prototype" value="1"/>
+        <div class="form-row">
+          <div class="form-group">{{ contact_form.name.label_tag }}{{ contact_form.name }}{% if contact_form.name.errors %}<ul class="errorlist">{% for e in contact_form.name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+          <div class="form-group">{{ contact_form.email.label_tag }}{{ contact_form.email }}{% if contact_form.email.errors %}<ul class="errorlist">{% for e in contact_form.email.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">{{ contact_form.phone.label_tag }}{{ contact_form.phone }}</div>
+          <div class="form-group">{{ contact_form.project_type.label_tag }}{{ contact_form.project_type }}</div>
+        </div>
+        <div class="form-group">{{ contact_form.message.label_tag }}{{ contact_form.message }}{% if contact_form.message.errors %}<ul class="errorlist">{% for e in contact_form.message.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+        <button type="submit" class="btn-submit">Send message →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-top">
+    <div>
+      <a class="logo" href="{% url 'index' %}">STRUQ<em>T</em>ON</a>
+      <p class="ft-desc">Structural engineering solutions for Zimbabwe's built environment. Registered, reliable, results-driven.</p>
+    </div>
+    <div class="ft-col">
+      <h4>Services</h4>
+      <ul>{% for s in site.services %}<li><a href="#services">{{ s.name }}</a></li>{% endfor %}</ul>
+    </div>
+    <div class="ft-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About us</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#testimonials">Clients</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+        <li><a href="#">{{ site.address }}</a></li>
+        <li><a href="#">{{ site.website }}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2026 {{ site.company_name }}. All rights reserved.</p>
+    <p>Precision Engineering · <span class="ft-green">{{ site.website }}</span></p>
+  </div>
+</footer>
+
+<a class="back-link" href="{% url 'index' %}">← All Prototypes</a>
+
+<script>
+  window.addEventListener('scroll',()=>{
+    const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+    document.getElementById('progress').style.width=p+'%';
+  });
+</script>
+</body>
+</html>

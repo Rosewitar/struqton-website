@@ -1,0 +1,461 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gold:#c8a84b;--gold-lt:#e2c06d;--gold-dim:rgba(200,168,75,0.10);--gold-border:rgba(200,168,75,0.22);
+      --bg:#070707;--bg2:#0d0d0d;--bg3:#111111;
+      --surf:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.08);
+      --text:#e2ddd5;--muted:rgba(226,221,213,0.58);--dim:rgba(226,221,213,0.35);
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',sans-serif;
+      --max:1280px;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 72px;height:72px;background:rgba(7,7,7,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,168,75,0.15)}
+    .back-link{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+    .back-link:hover{color:var(--gold)}
+    .logo{font-family:var(--serif);font-weight:700;font-size:22px;color:#fff;text-decoration:none;letter-spacing:0.06em}
+    .logo em{color:var(--gold);font-style:normal}
+    .logo-sub{display:block;font-family:var(--sans);font-size:7px;letter-spacing:0.22em;color:rgba(255,255,255,0.3);font-weight:500;text-transform:uppercase;margin-top:2px}
+    .nav-links{display:flex;gap:44px;list-style:none}
+    .nav-links a{font-size:11px;font-weight:400;color:var(--muted);text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;transition:color .2s}
+    .nav-links a:hover{color:var(--gold)}
+    .nav-btn{font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:10px 22px;text-decoration:none;transition:all .25s;background:transparent}
+    .nav-btn:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold-lt)}
+
+    /* HERO — CINEMATIC SPLIT */
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:72px;overflow:hidden}
+    .hero-video-half{position:relative;overflow:hidden}
+    .hero-video-half video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .hero-video-half::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,7,0.1) 0%,rgba(7,7,7,0.5) 100%),linear-gradient(to bottom,rgba(7,7,7,0.35) 0%,transparent 40%,rgba(7,7,7,0.5) 100%)}
+    .hero-video-label{position:absolute;bottom:24px;left:24px;z-index:3;font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:10px}
+    .hero-video-label::before{content:'';width:24px;height:1px;background:var(--gold)}
+    .hero-text-half{background:var(--bg);display:flex;align-items:flex-end;padding:0 72px 80px 60px;position:relative}
+    .hero-text-half::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--gold-border),transparent)}
+    /* legacy decorative elements — hidden */
+    .hero-bg-line{display:none}
+    .hero-number{display:none}
+    .hero-content{position:relative;z-index:2;max-width:900px;animation:fadeUp .9s ease both}
+    .hero-label{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:16px}
+    .hero-label::before{content:'';width:40px;height:1px;background:var(--gold)}
+    .hero h1{font-family:var(--serif);font-size:clamp(56px,7vw,108px);font-weight:600;line-height:0.95;color:#fff;letter-spacing:-0.02em;margin-bottom:36px}
+    .hero h1 em{color:var(--gold);font-style:italic}
+    .hero-lower{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;padding-top:36px;border-top:1px solid var(--border)}
+    .hero-sub{font-size:15px;color:var(--muted);line-height:1.8;max-width:460px}
+    .hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:14px;flex-shrink:0}
+    .btn-gold{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--gold);padding:14px 32px;text-decoration:none;transition:background .2s}
+    .btn-gold:hover{background:var(--gold-lt)}
+    .btn-outline{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:14px 32px;text-decoration:none;transition:all .2s}
+    .btn-outline:hover{color:#fff;border-color:rgba(255,255,255,0.3)}
+
+    /* STATS ROW */
+    .stats-row{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 72px}
+    .stats-row-inner{max-width:var(--max);margin:0 auto;display:flex;gap:0}
+    .hs{padding:0 40px;border-right:1px solid var(--border);text-align:center}
+    .hs:first-child{padding-left:0}
+    .hs:last-child{border-right:none}
+    .hs-n{font-family:var(--serif);font-size:42px;font-weight:600;color:#fff;line-height:1}
+    .hs-n em{color:var(--gold);font-style:normal}
+    .hs-l{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+    /* MANIFESTO */
+    .manifesto{padding:100px 72px;max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:80px;align-items:start}
+    .manifesto-label{font-size:10px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);padding-top:8px}
+    .manifesto-text{font-family:var(--serif);font-size:clamp(26px,2.8vw,40px);font-weight:400;color:#fff;line-height:1.45;letter-spacing:-0.01em}
+    .manifesto-text em{color:var(--gold);font-style:italic}
+
+    /* SERVICES */
+    .services-outer{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .services-inner{max-width:var(--max);margin:0 auto;padding:100px 72px}
+    .srv-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+    .section-serif{font-family:var(--serif);font-size:clamp(36px,4vw,56px);font-weight:600;color:#fff;line-height:1.1;letter-spacing:-0.01em}
+    .srv-list{display:flex;flex-direction:column;gap:0}
+    .srv-row{display:grid;grid-template-columns:60px 1fr 1fr auto;gap:40px;align-items:start;padding:32px 0;border-bottom:1px solid var(--border);transition:background .2s;cursor:default}
+    .srv-row:hover{background:rgba(200,168,75,0.03)}
+    .srv-row:last-child{border-bottom:none}
+    .srv-n{font-family:var(--serif);font-size:14px;color:var(--gold);font-style:italic;padding-top:3px}
+    .srv-name{font-family:var(--serif);font-size:22px;font-weight:600;color:#fff;line-height:1.2}
+    .srv-desc{font-size:13px;color:var(--muted);line-height:1.75}
+    .srv-arrow{font-size:18px;color:var(--gold);opacity:0;transition:opacity .2s;align-self:center}
+    .srv-row:hover .srv-arrow{opacity:1}
+
+    /* PROJECTS */
+    .proj-outer{padding:100px 72px;max-width:var(--max);margin:0 auto}
+    .proj-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px}
+    .proj-grid-gold{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--gold-border)}
+    .pgc{background:var(--bg);overflow:hidden;position:relative}
+    .pgc-img{height:260px;position:relative;overflow:hidden}
+    .pgc-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,7,0.8) 0%,transparent 60%)}
+    .pgc-a{background:linear-gradient(150deg,#0c1f2c 0%,#1a3d52 100%)}
+    .pgc-b{background:linear-gradient(150deg,#1a1a0a 0%,#2e2d10 100%)}
+    .pgc-c{background:linear-gradient(150deg,#0c1f18 0%,#1a3d2a 100%)}
+    .pgc-d{background:linear-gradient(150deg,#1a0c0c 0%,#2e1a1a 100%)}
+    .pgc-overlay{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;z-index:2}
+    .pgc-cat{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+    .pgc-title{font-family:var(--serif);font-size:20px;font-weight:600;color:#fff}
+    .pgc-info{padding:18px 28px;background:var(--bg2);border-top:1px solid var(--border)}
+    .pgc-info p{font-size:12px;color:var(--muted);letter-spacing:0.04em}
+
+    /* STATS BAND */
+    .stats-band{background:var(--gold);padding:56px 72px}
+    .stats-band-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+    .sb-item{text-align:center;padding:0 20px;border-right:1px solid rgba(0,0,0,0.15)}
+    .sb-item:last-child{border-right:none}
+    .sb-n{font-family:var(--serif);font-size:56px;font-weight:700;color:var(--bg);line-height:1}
+    .sb-l{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(7,7,7,0.65);margin-top:8px}
+
+    /* ABOUT */
+    .about-gold{padding:100px 72px;max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .about-left-g .section-serif{margin-bottom:28px}
+    .about-desc{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:20px}
+    .values-gold{display:flex;flex-direction:column;gap:16px;margin-top:36px}
+    .vg{display:flex;align-items:flex-start;gap:16px}
+    .vg-dot{width:1px;background:var(--gold);align-self:stretch;flex-shrink:0;margin-top:4px}
+    .vg-text strong{display:block;font-family:var(--serif);font-size:16px;font-weight:600;color:#fff;margin-bottom:2px}
+    .vg-text span{font-size:12px;color:var(--muted)}
+    .about-right-g{display:flex;flex-direction:column;gap:2px}
+    .about-img-panel{height:280px;border:1px solid var(--border);position:relative;overflow:hidden;background:linear-gradient(145deg,#0c1520,#1a2d3e)}
+    .about-img-panel::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(200,168,75,0.08),transparent 60%)}
+    .about-img-panel-b{height:160px;border:1px solid var(--border);background:linear-gradient(145deg,#111,#1a1a1a);display:flex;align-items:center;justify-content:center;padding:28px}
+    .pull-quote{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--gold);line-height:1.5;text-align:center}
+
+    /* TESTIMONIALS */
+    .testi-outer{background:var(--bg2);border-top:1px solid var(--border);padding:100px 72px}
+    .testi-inner{max-width:var(--max);margin:0 auto}
+    .testi-header{margin-bottom:56px}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .testi-card{border:1px solid var(--border);padding:36px 32px;background:var(--bg);position:relative}
+    .testi-card::before{content:'\201C';font-family:var(--serif);font-size:80px;color:var(--gold);opacity:0.3;position:absolute;top:16px;left:24px;line-height:1}
+    .testi-quote{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--text);line-height:1.75;margin-bottom:28px;position:relative;z-index:1}
+    .testi-author{display:flex;align-items:center;gap:14px}
+    .testi-init{width:40px;height:40px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;font-weight:600;color:var(--gold);flex-shrink:0}
+    .testi-name{font-size:13px;font-weight:500;color:#fff}
+    .testi-role{font-size:11px;color:var(--muted);margin-top:2px}
+
+    /* CONTACT */
+    .contact-outer{padding:100px 72px;max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+    .contact-left .section-serif{margin-bottom:20px}
+    .contact-left p{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:36px}
+    .contact-info-list{display:flex;flex-direction:column;gap:20px}
+    .ci-row{display:flex;align-items:flex-start;gap:16px}
+    .ci-label{font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);min-width:60px;padding-top:2px}
+    .ci-val{font-size:14px;color:var(--text)}
+
+    /* FORM */
+    .form-gold{display:flex;flex-direction:column;gap:20px}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .fg-field{display:flex;flex-direction:column;gap:6px}
+    .fg-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+    .fg-input{background:transparent;border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:14px;padding:13px 16px;outline:none;transition:border-color .2s;width:100%}
+    .fg-input:focus{border-color:var(--gold)}
+    .fg-input::placeholder{color:var(--dim)}
+    .fg-textarea{resize:vertical;min-height:120px}
+    .fg-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--sans);font-size:14px;padding:13px 16px;outline:none;transition:border-color .2s;width:100%;appearance:none}
+    .fg-select:focus{border-color:var(--gold)}
+    .fg-submit{background:var(--gold);color:var(--bg);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:none;padding:16px 36px;cursor:pointer;transition:background .2s;align-self:flex-start}
+    .fg-submit:hover{background:var(--gold-lt)}
+    .errorlist{list-style:none;padding:0;margin-top:4px}
+    .errorlist li{font-size:11px;color:#e07070}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 72px 32px}
+    .ft-wrap{max-width:var(--max);margin:0 auto}
+    .ft-top{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .ft-brand-g p{font-size:13px;color:var(--muted);line-height:1.8;max-width:240px;margin-top:14px}
+    .ft-col h4{font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+    .ft-col ul{list-style:none}
+    .ft-col li{margin-bottom:10px}
+    .ft-col a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+    .ft-col a:hover{color:var(--gold)}
+    .ft-bot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px}
+    .ft-bot p{font-size:11px;color:var(--dim);letter-spacing:0.05em}
+    .ft-bot span{color:var(--gold)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+    @media(max-width:1024px){
+      nav{padding:0 32px}.hero{grid-template-columns:1fr}.hero-video-half{min-height:46vh}.hero-text-half{padding:48px 32px 60px}
+      .hero-lower{flex-direction:column;align-items:flex-start}.hero-actions{align-items:flex-start}
+      .stats-row{padding:32px}.manifesto{grid-template-columns:1fr;gap:24px;padding:72px 32px}
+      .services-inner{padding:72px 32px}.srv-row{grid-template-columns:40px 1fr;gap:20px}.srv-desc,.srv-arrow{display:none}
+      .proj-outer{padding:72px 32px}.proj-grid-gold{grid-template-columns:1fr}
+      .stats-band{padding:48px 32px}.stats-band-inner{grid-template-columns:1fr 1fr;gap:32px}.sb-item{border-right:none}
+      .about-gold{grid-template-columns:1fr;gap:48px;padding:72px 32px}
+      .testi-outer{padding:72px 32px}.testi-grid{grid-template-columns:1fr}
+      .contact-outer{grid-template-columns:1fr;gap:48px;padding:72px 32px}
+      .ft-top{grid-template-columns:1fr 1fr}.ft-wrap{padding:0 32px}
+    }
+    @media(max-width:640px){
+      nav{padding:0 20px}.nav-links,.nav-btn{display:none}.hero{padding:0 20px 48px}
+      .stats-row{padding:24px 20px}.stats-row-inner{flex-wrap:wrap;gap:24px}.hs{border:none;padding:0}
+      .manifesto,.services-inner,.proj-outer,.about-gold,.testi-outer,.contact-outer{padding-left:20px;padding-right:20px}
+      .stats-band{padding:40px 20px}.stats-band-inner{grid-template-columns:1fr 1fr}
+      .form-row-2{grid-template-columns:1fr}
+      .ft-top{grid-template-columns:1fr}.ft-wrap{padding:0 20px}
+      .ft-bot{flex-direction:column;gap:10px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="back-link" href="{% url 'index' %}">← All Prototypes</a>
+  <a class="logo" href="#">Struq<em>t</em>on<span class="logo-sub">Structural Engineering</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-btn" href="#contact">Enquire</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- LEFT: Drone video -->
+  <div class="hero-video-half">
+    <video autoplay muted loop playsinline>
+      <source src="{% static 'website/media/DJI_20260508141241_0002_D.MP4' %}" type="video/mp4">
+    </video>
+    <div class="hero-video-label">Aerial site footage · Zimbabwe</div>
+  </div>
+  <!-- RIGHT: Text content -->
+  <div class="hero-text-half">
+    <div class="hero-content">
+      <div class="hero-label">Structural Engineering · Harare, Zimbabwe</div>
+      <h1>Strength<br>in design.<br><em>Precision</em><br>in execution.</h1>
+      <div class="hero-lower">
+        <p class="hero-sub">{{ site.company_name }} is Zimbabwe's trusted partner for engineering solutions that are precise, practical, and built to last. From concept to completion — we engineer right.</p>
+        <div class="hero-actions">
+          <a class="btn-gold" href="#services">Our Services →</a>
+          <a class="btn-outline" href="#projects">View Projects</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stats-row-inner">
+    <div class="hs"><div class="hs-n">{{ site.stats.projects }}<em>+</em></div><div class="hs-l">Projects completed</div></div>
+    <div class="hs"><div class="hs-n">{{ site.stats.years }}<em>+</em></div><div class="hs-l">Years of practice</div></div>
+    <div class="hs"><div class="hs-n">{{ site.stats.provinces }}</div><div class="hs-l">Provinces covered</div></div>
+    <div class="hs"><div class="hs-n">{{ site.stats.on_spec }}<em></em></div><div class="hs-l">On-spec delivery</div></div>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-label">Our standpoint</div>
+  <div class="manifesto-text">At Struqton, we believe structural integrity is the <em>foundation</em> of every successful development. We don't just engineer buildings — we secure the foundations upon which our community and economy continue to thrive.</div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-outer" id="services">
+  <div class="services-inner">
+    <div class="srv-header">
+      <div class="section-serif">What we do</div>
+      <a class="btn-outline" href="#contact">Request a service →</a>
+    </div>
+    <div class="srv-list">
+      {% for service in site.services %}
+      <div class="srv-row">
+        <div class="srv-n">{{ service.number }}</div>
+        <div class="srv-name">{{ service.name }}</div>
+        <div class="srv-desc">{{ service.description }}</div>
+        <div class="srv-arrow">→</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="proj-outer" id="projects">
+  <div class="proj-header">
+    <div class="section-serif">Selected work</div>
+    <a class="btn-outline" href="#contact">Discuss your project →</a>
+  </div>
+  <div class="proj-grid-gold">
+    {% for project in site.projects %}
+    <div class="pgc">
+      {% if forloop.first %}<div class="pgc-img" style="position:relative"><img src="{% static 'website/media/DJI_20260508142308_0014_D.JPG' %}" alt="Aerial site view" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">{% else %}<div class="pgc-img pgc-{{ project.color_class|cut:'pi-' }}">{% endif %}
+        <div class="pgc-overlay">
+          <div class="pgc-cat">{{ project.category }}</div>
+          <div class="pgc-title">{{ project.title }}</div>
+        </div>
+      </div>
+      <div class="pgc-info"><p>{{ project.services }} · {{ project.year }}</p></div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- STATS BAND (gold bar) -->
+<div class="stats-band">
+  <div class="stats-band-inner">
+    <div class="sb-item"><div class="sb-n">{{ site.stats.projects }}</div><div class="sb-l">Projects completed</div></div>
+    <div class="sb-item"><div class="sb-n">{{ site.stats.years }}</div><div class="sb-l">Years of expertise</div></div>
+    <div class="sb-item"><div class="sb-n">{{ site.stats.provinces }}</div><div class="sb-l">Provinces covered</div></div>
+    <div class="sb-item"><div class="sb-n">{{ site.stats.on_spec }}</div><div class="sb-l">On-spec delivery</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="about-gold" id="about">
+  <div class="about-left-g">
+    <div class="section-serif">Engineering<br>you can trust</div>
+    <p class="about-desc">Based in the heart of Harare, {{ site.company_name }} is a premier engineering firm dedicated to building a safer, stronger Zimbabwe. We specialise in providing innovative structural solutions across the residential, commercial, and industrial sectors.</p>
+    <p class="about-desc">Our team combines deep local knowledge with global engineering standards to ensure every project is built to last.</p>
+    <a class="btn-gold" href="#contact">Work with us →</a>
+    <div class="values-gold">
+      <div class="vg"><div class="vg-dot"></div><div class="vg-text"><strong>Precision</strong><span>Every calculation checked and verified</span></div></div>
+      <div class="vg"><div class="vg-dot"></div><div class="vg-text"><strong>Integrity</strong><span>Honest assessments, no shortcuts</span></div></div>
+      <div class="vg"><div class="vg-dot"></div><div class="vg-text"><strong>Speed</strong><span>Responsive turnarounds without compromise</span></div></div>
+      <div class="vg"><div class="vg-dot"></div><div class="vg-text"><strong>Compliance</strong><span>Fully aligned with Zimbabwe building codes</span></div></div>
+    </div>
+  </div>
+  <div class="about-right-g">
+    <div class="about-img-panel"></div>
+    <div style="height:2px;background:linear-gradient(90deg,var(--gold),transparent)"></div>
+    <div class="about-img-panel-b">
+      <div class="pull-quote">"We don't just engineer buildings — we secure the foundations upon which communities thrive."</div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testi-outer">
+  <div class="testi-inner">
+    <div class="testi-header">
+      <div class="section-serif">Client voices</div>
+    </div>
+    <div class="testi-grid">
+      {% for t in site.testimonials %}
+      <div class="testi-card">
+        <div class="testi-quote">{{ t.quote }}</div>
+        <div class="testi-author">
+          <div class="testi-init">{{ t.initials }}</div>
+          <div>
+            <div class="testi-name">{{ t.name }}</div>
+            <div class="testi-role">{{ t.role }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-outer" id="contact">
+  <div class="contact-left">
+    <div class="section-serif">Start your<br><em style="color:var(--gold)">project</em></div>
+    <p>Whether you need a structural report, full design package, or just want to discuss a project — we respond within 24 hours.</p>
+    <div class="contact-info-list">
+      <div class="ci-row"><span class="ci-label">Email</span><span class="ci-val">{{ site.email }}</span></div>
+      <div class="ci-row"><span class="ci-label">Phone</span><span class="ci-val">{{ site.phone }}</span></div>
+      <div class="ci-row"><span class="ci-label">Location</span><span class="ci-val">{{ site.address }}</span></div>
+    </div>
+  </div>
+  <div class="contact-right">
+    <form class="form-gold" method="POST" action="{% url 'contact_submit' %}">
+      {% csrf_token %}
+      <input type="hidden" name="source_prototype" value="2">
+      <div class="form-row-2">
+        <div class="fg-field">
+          <label class="fg-label">Your name</label>
+          <input class="fg-input" type="text" name="name" placeholder="Full name" value="{{ contact_form.name.value|default:'' }}">
+          {% if contact_form.name.errors %}<ul class="errorlist">{% for e in contact_form.name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+        <div class="fg-field">
+          <label class="fg-label">Email</label>
+          <input class="fg-input" type="email" name="email" placeholder="your@email.com" value="{{ contact_form.email.value|default:'' }}">
+          {% if contact_form.email.errors %}<ul class="errorlist">{% for e in contact_form.email.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="fg-field">
+          <label class="fg-label">Phone (optional)</label>
+          <input class="fg-input" type="text" name="phone" placeholder="+263 ..." value="{{ contact_form.phone.value|default:'' }}">
+        </div>
+        <div class="fg-field">
+          <label class="fg-label">Service required</label>
+          <select class="fg-select" name="project_type">
+            <option value="">Select a service…</option>
+            <option value="structural_design"{% if contact_form.project_type.value == 'structural_design' %} selected{% endif %}>Structural Design</option>
+            <option value="construction_supervision"{% if contact_form.project_type.value == 'construction_supervision' %} selected{% endif %}>Construction Supervision</option>
+            <option value="building_inspection"{% if contact_form.project_type.value == 'building_inspection' %} selected{% endif %}>Building Inspection</option>
+            <option value="foundation_engineering"{% if contact_form.project_type.value == 'foundation_engineering' %} selected{% endif %}>Foundation Engineering</option>
+            <option value="steel_frame_design"{% if contact_form.project_type.value == 'steel_frame_design' %} selected{% endif %}>Steel Frame Design</option>
+            <option value="compliance_report"{% if contact_form.project_type.value == 'compliance_report' %} selected{% endif %}>Reports &amp; Compliance</option>
+            <option value="other"{% if contact_form.project_type.value == 'other' %} selected{% endif %}>Other / Not sure yet</option>
+          </select>
+          {% if contact_form.project_type.errors %}<ul class="errorlist">{% for e in contact_form.project_type.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      </div>
+      <div class="fg-field">
+        <label class="fg-label">Tell us about your project</label>
+        <textarea class="fg-input fg-textarea" name="message" placeholder="Describe your project, location, and any specific requirements…">{{ contact_form.message.value|default:'' }}</textarea>
+        {% if contact_form.message.errors %}<ul class="errorlist">{% for e in contact_form.message.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+      <button type="submit" class="fg-submit">Send Enquiry →</button>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-wrap">
+    <div class="ft-top">
+      <div class="ft-brand-g">
+        <a class="logo" href="#">Struq<em>t</em>on</a>
+        <p>Structural engineering solutions for Zimbabwe's built environment. Registered, reliable, results-driven.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Services</h4>
+        <ul>
+          {% for service in site.services %}
+          <li><a href="#services">{{ service.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="{% url 'index' %}">All Prototypes</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li><a href="tel:{{ site.phone }}">{{ site.phone }}</a></li>
+          <li><a href="#contact">{{ site.address }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>&copy; 2024 <span>{{ site.company_name }}</span>. All rights reserved.</p>
+      <p>{{ site.website }}</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

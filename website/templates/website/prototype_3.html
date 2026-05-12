@@ -1,0 +1,464 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --navy:#1565a0;--navy-lt:#1976d2;--navy-dim:rgba(21,101,160,0.08);--navy-border:rgba(21,101,160,0.2);
+      --bg:#f7f5f0;--bg2:#f0ede6;--bg3:#ffffff;
+      --border:#e0dbd2;--border-strong:#c8c1b7;
+      --text:#1a1a1a;--muted:#6b6560;--dim:#9e9890;
+      --font:'Plus Jakarta Sans',sans-serif;
+      --max:1280px;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 72px;height:72px;background:rgba(247,245,240,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .back-link{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+    .back-link:hover{color:var(--navy)}
+    .logo{font-weight:800;font-size:18px;color:var(--text);text-decoration:none;letter-spacing:0.04em;text-transform:uppercase}
+    .logo em{color:var(--navy);font-style:normal}
+    .logo-sub{display:block;font-size:7px;letter-spacing:0.2em;color:var(--dim);font-weight:500;text-transform:uppercase;margin-top:2px}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--navy)}
+    .nav-btn{font-size:12px;font-weight:600;color:#fff;background:var(--navy);padding:10px 24px;text-decoration:none;border-radius:4px;transition:background .2s}
+    .nav-btn:hover{background:var(--navy-lt)}
+
+    /* HERO — CINEMATIC SPLIT */
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:66px;overflow:hidden}
+    .hero-video-half{position:relative;overflow:hidden}
+    .hero-video-half video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .hero-video-half::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(247,245,240,0.05) 0%,rgba(247,245,240,0.35) 100%),linear-gradient(to bottom,rgba(0,0,0,0.3) 0%,transparent 40%,rgba(0,0,0,0.35) 100%)}
+    .hero-video-label{position:absolute;bottom:24px;left:24px;z-index:3;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px}
+    .hero-video-label::before{content:'';width:20px;height:1px;background:var(--navy)}
+    .hero-text-half{background:var(--bg3);display:flex;flex-direction:column;justify-content:center;padding:80px 60px 80px 52px;border-left:1px solid var(--border)}
+    .hero-left .badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--navy);background:var(--navy-dim);border:1px solid var(--navy-border);padding:6px 14px;border-radius:999px;margin-bottom:24px}
+    .hero-left .badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--navy);flex-shrink:0}
+    .hero h1{font-size:clamp(40px,4.5vw,68px);font-weight:800;line-height:1.06;color:var(--text);letter-spacing:-0.025em;margin-bottom:20px}
+    .hero h1 em{color:var(--navy);font-style:normal}
+    .hero-left p{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:36px;max-width:480px}
+    .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+    .btn-navy{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#fff;background:var(--navy);padding:14px 28px;text-decoration:none;border-radius:4px;transition:background .2s}
+    .btn-navy:hover{background:var(--navy-lt)}
+    .btn-light{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text);background:var(--bg3);border:1px solid var(--border-strong);padding:14px 28px;text-decoration:none;border-radius:4px;transition:all .2s}
+    .btn-light:hover{border-color:var(--navy);color:var(--navy)}
+    .hero-right{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .hero-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:24px 20px;text-align:center}
+    .hero-stat-n{font-size:40px;font-weight:800;color:var(--navy);line-height:1;margin-bottom:6px}
+    .hero-stat-l{font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+    .trust-row{display:flex;align-items:center;gap:8px;margin-top:28px;padding-top:24px;border-top:1px solid var(--border)}
+    .trust-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0}
+    .trust-text{font-size:12px;color:var(--muted);font-weight:500}
+
+    /* SERVICES */
+    .services-sect{background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:100px 72px}
+    .sect-inner{max-width:var(--max);margin:0 auto}
+    .sect-header{margin-bottom:56px}
+    .sect-badge{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--navy);margin-bottom:10px}
+    .sect-title{font-size:clamp(32px,3.5vw,48px);font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.1}
+    .srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border)}
+    .srv-card{background:var(--bg3);padding:36px 30px;transition:background .2s}
+    .srv-card:hover{background:#fdf9f4}
+    .srv-card-n{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--navy);margin-bottom:16px;opacity:0.7}
+    .srv-card-name{font-size:18px;font-weight:700;color:var(--text);margin-bottom:12px;line-height:1.25}
+    .srv-card-desc{font-size:13px;color:var(--muted);line-height:1.8}
+    .srv-card-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--navy);margin-top:20px;text-decoration:none;transition:gap .2s}
+    .srv-card:hover .srv-card-link{gap:10px}
+
+    /* PROCESS */
+    .process-sect{padding:100px 72px}
+    .process-inner{max-width:var(--max);margin:0 auto}
+    .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
+    .process-steps::before{content:'';position:absolute;top:28px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);height:1px;background:linear-gradient(90deg,var(--navy) 0%,var(--navy-border) 100%);z-index:0}
+    .step{position:relative;text-align:center;padding:0 20px}
+    .step-num{width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1}
+    .step-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px}
+    .step-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+    /* PROJECTS */
+    .projects-sect{background:var(--bg2);border-top:1px solid var(--border);padding:100px 72px}
+    .proj-inner{max-width:var(--max);margin:0 auto}
+    .proj-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+    .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+    .proj-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:box-shadow .25s,transform .25s}
+    .proj-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08)}
+    .proj-img{height:200px;position:relative}
+    .proj-img-a{background:linear-gradient(135deg,#1a3a6e,#2563a8)}
+    .proj-img-b{background:linear-gradient(135deg,#1a4a3e,#2d7a63)}
+    .proj-img-c{background:linear-gradient(135deg,#3e2a1a,#7a5630)}
+    .proj-img-d{background:linear-gradient(135deg,#3a1a1a,#8c3030)}
+    .proj-category{position:absolute;top:16px;left:16px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;background:var(--navy);padding:4px 10px;border-radius:2px}
+    .proj-body{padding:24px}
+    .proj-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+    .proj-meta{font-size:12px;color:var(--muted)}
+
+    /* TRUST INDICATORS */
+    .trust-sect{background:var(--navy);padding:56px 72px}
+    .trust-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-left:1px solid rgba(255,255,255,0.15)}
+    .ti{padding:0 36px;border-right:1px solid rgba(255,255,255,0.15);text-align:center}
+    .ti-icon{font-size:28px;margin-bottom:12px;opacity:0.85}
+    .ti-n{font-size:36px;font-weight:800;color:#fff;line-height:1;margin-bottom:6px}
+    .ti-l{font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.65)}
+
+    /* TESTIMONIALS */
+    .testi-sect{padding:100px 72px}
+    .testi-inner{max-width:var(--max);margin:0 auto}
+    .testi-header{margin-bottom:48px}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .testi-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:32px 28px}
+    .testi-stars{display:flex;gap:3px;margin-bottom:16px}
+    .star{width:14px;height:14px;background:var(--navy);border-radius:2px;opacity:0.9}
+    .testi-quote{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:24px;font-style:italic}
+    .testi-author{display:flex;align-items:center;gap:12px}
+    .testi-init{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+    .testi-name{font-size:14px;font-weight:700;color:var(--text)}
+    .testi-role{font-size:11px;color:var(--muted);margin-top:2px}
+
+    /* CONTACT */
+    .contact-sect{background:var(--bg2);border-top:1px solid var(--border);padding:100px 72px}
+    .contact-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start}
+    .contact-left .sect-title{margin-bottom:16px}
+    .contact-left p{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:32px}
+    .ci-row{display:flex;flex-direction:column;gap:3px;margin-bottom:20px}
+    .ci-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--navy)}
+    .ci-val{font-size:14px;color:var(--text)}
+
+    /* FORM */
+    .form-light{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:40px}
+    .form-light-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:28px}
+    .fl-fields{display:flex;flex-direction:column;gap:18px}
+    .fl-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .fl-field{display:flex;flex-direction:column;gap:6px}
+    .fl-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+    .fl-input{border:1px solid var(--border-strong);color:var(--text);font-family:var(--font);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s;border-radius:4px;background:var(--bg3);width:100%}
+    .fl-input:focus{border-color:var(--navy)}
+    .fl-input::placeholder{color:var(--dim)}
+    .fl-textarea{resize:vertical;min-height:110px}
+    .fl-select{border:1px solid var(--border-strong);color:var(--text);font-family:var(--font);font-size:14px;padding:12px 14px;outline:none;border-radius:4px;background:var(--bg3);width:100%;appearance:none;transition:border-color .2s}
+    .fl-select:focus{border-color:var(--navy)}
+    .fl-submit{background:var(--navy);color:#fff;font-family:var(--font);font-size:13px;font-weight:600;border:none;padding:14px 32px;cursor:pointer;transition:background .2s;border-radius:4px;width:100%;margin-top:4px}
+    .fl-submit:hover{background:var(--navy-lt)}
+    .errorlist{list-style:none;padding:0;margin-top:4px}
+    .errorlist li{font-size:11px;color:#dc3545}
+
+    /* FOOTER */
+    footer{background:var(--text);padding:64px 72px 32px}
+    .ft-wrap{max-width:var(--max);margin:0 auto}
+    .ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .ft-logo{font-weight:800;font-size:18px;color:#fff;text-decoration:none;letter-spacing:0.04em;text-transform:uppercase}
+    .ft-logo em{color:#5ba3d9;font-style:normal}
+    .ft-brand p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8;margin-top:14px;max-width:220px}
+    .ft-col h4{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:18px}
+    .ft-col ul{list-style:none}
+    .ft-col li{margin-bottom:10px}
+    .ft-col a{font-size:13px;color:rgba(255,255,255,0.55);text-decoration:none;transition:color .2s}
+    .ft-col a:hover{color:#fff}
+    .ft-bot{border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;display:flex;justify-content:space-between}
+    .ft-bot p{font-size:12px;color:rgba(255,255,255,0.3)}
+
+    @media(max-width:1024px){
+      nav{padding:0 32px}.hero{grid-template-columns:1fr}.hero-video-half{min-height:46vh}.hero-text-half{padding:48px 32px 60px}
+      .services-sect,.process-sect,.projects-sect,.testi-sect,.contact-sect{padding-left:32px;padding-right:32px}
+      .srv-grid{grid-template-columns:1fr 1fr}
+      .process-steps{grid-template-columns:1fr 1fr;gap:32px}.process-steps::before{display:none}
+      .proj-grid{grid-template-columns:1fr}
+      .trust-sect{padding:48px 32px}.trust-inner{grid-template-columns:1fr 1fr;gap:32px;border-left:none}.ti{border:none;padding:0}
+      .testi-grid{grid-template-columns:1fr}.contact-inner{grid-template-columns:1fr;gap:48px}
+      .ft-top{grid-template-columns:1fr 1fr}.ft-wrap,.footer{padding-left:32px;padding-right:32px}
+      footer{padding:48px 32px 24px}
+    }
+    @media(max-width:640px){
+      nav{padding:0 20px}.nav-links,.nav-btn{display:none}
+      .hero-text-half{padding:40px 20px 48px}.hero-right{grid-template-columns:1fr 1fr}
+      .services-sect,.process-sect,.projects-sect,.testi-sect,.contact-sect{padding-left:20px;padding-right:20px}
+      .srv-grid{grid-template-columns:1fr}.process-steps{grid-template-columns:1fr}
+      .trust-inner{grid-template-columns:1fr 1fr}.form-light{padding:24px}
+      .fl-row-2{grid-template-columns:1fr}.ft-top{grid-template-columns:1fr}
+      footer{padding:40px 20px 20px}.ft-bot{flex-direction:column;gap:8px}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="back-link" href="{% url 'index' %}">← All Prototypes</a>
+  <a class="logo" href="#">Struq<em>t</em>on<span class="logo-sub">Structural</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-btn" href="#contact">Get a Quote</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <!-- LEFT: Drone video -->
+  <div class="hero-video-half">
+    <video autoplay muted loop playsinline>
+      <source src="{% static 'website/media/DJI_20260508141241_0002_D.MP4' %}" type="video/mp4">
+    </video>
+    <div class="hero-video-label">Aerial site footage · Zimbabwe</div>
+  </div>
+  <!-- RIGHT: Text + stats -->
+  <div class="hero-text-half">
+    <div class="hero-left" style="margin-bottom:32px">
+      <div class="badge">Structural Engineering · Zimbabwe</div>
+      <h1>Built on<br><em>Precision.</em><br>Designed<br>to Last.</h1>
+      <p>{{ site.company_name }} delivers engineering solutions for Zimbabwe's residential, commercial, and industrial sectors — from structural design to compliance reports.</p>
+      <div class="hero-btns">
+        <a class="btn-navy" href="#services">Our Services →</a>
+        <a class="btn-light" href="#projects">View Projects</a>
+      </div>
+      <div class="trust-row">
+        <div class="trust-dot"></div>
+        <span class="trust-text">Registered structural engineers · Zimbabwe-compliant · 24h response</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat"><div class="hero-stat-n">{{ site.stats.projects }}</div><div class="hero-stat-l">Projects Done</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">{{ site.stats.years }}</div><div class="hero-stat-l">Years Active</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">{{ site.stats.provinces }}</div><div class="hero-stat-l">Provinces</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">{{ site.stats.on_spec }}</div><div class="hero-stat-l">On-Spec Rate</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-sect" id="services">
+  <div class="sect-inner">
+    <div class="sect-header">
+      <div class="sect-badge">What we offer</div>
+      <div class="sect-title">Structural engineering<br>across every phase</div>
+    </div>
+    <div class="srv-grid">
+      {% for service in site.services %}
+      <div class="srv-card">
+        <div class="srv-card-n">{{ service.number }}</div>
+        <div class="srv-card-name">{{ service.name }}</div>
+        <div class="srv-card-desc">{{ service.description }}</div>
+        <a class="srv-card-link" href="#contact">Enquire →</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="process-sect">
+  <div class="process-inner">
+    <div class="sect-header">
+      <div class="sect-badge">How we work</div>
+      <div class="sect-title">A clear process,<br>every time</div>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-name">Initial Brief</div>
+        <div class="step-desc">We meet to understand your project scope, site conditions, and engineering requirements.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-name">Analysis &amp; Design</div>
+        <div class="step-desc">Our engineers perform full structural analysis and produce compliant drawings and calculations.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-name">Review &amp; Sign-Off</div>
+        <div class="step-desc">All deliverables are reviewed, verified, and signed by a registered structural engineer.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-name">Delivery &amp; Support</div>
+        <div class="step-desc">We deliver your package promptly and remain available for site queries and supervision.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="projects-sect" id="projects">
+  <div class="proj-inner">
+    <div class="proj-header">
+      <div>
+        <div class="sect-badge">Our work</div>
+        <div class="sect-title">Selected projects</div>
+      </div>
+      <a class="btn-navy" href="#contact">Discuss yours →</a>
+    </div>
+    <div class="proj-grid">
+      {% for project in site.projects %}
+      <div class="proj-card">
+        {% if forloop.first %}
+        <div class="proj-img" style="position:relative;padding:0">
+          <img src="{% static 'website/media/DJI_20260508142308_0014_D.JPG' %}" alt="Aerial site view" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span class="proj-category" style="position:absolute;top:16px;left:16px;z-index:2">{{ project.category }}</span>
+        </div>
+        {% else %}
+        <div class="proj-img proj-img-{{ forloop.counter }}">
+          <span class="proj-category">{{ project.category }}</span>
+        </div>
+        {% endif %}
+        <div class="proj-body">
+          <div class="proj-title">{{ project.title }}</div>
+          <div class="proj-meta">{{ project.services }} · {{ project.year }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAND -->
+<div class="trust-sect">
+  <div class="trust-inner">
+    <div class="ti"><div class="ti-n">{{ site.stats.projects }}</div><div class="ti-l">Projects completed</div></div>
+    <div class="ti"><div class="ti-n">{{ site.stats.years }}</div><div class="ti-l">Years of practice</div></div>
+    <div class="ti"><div class="ti-n">{{ site.stats.provinces }}</div><div class="ti-l">Provinces covered</div></div>
+    <div class="ti"><div class="ti-n">{{ site.stats.on_spec }}</div><div class="ti-l">On-spec delivery</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testi-sect" id="about">
+  <div class="testi-inner">
+    <div class="testi-header">
+      <div class="sect-badge">What clients say</div>
+      <div class="sect-title">Trusted by developers,<br>builders, and homeowners</div>
+    </div>
+    <div class="testi-grid">
+      {% for t in site.testimonials %}
+      <div class="testi-card">
+        <div class="testi-stars">
+          <div class="star"></div><div class="star"></div><div class="star"></div>
+          <div class="star"></div><div class="star"></div>
+        </div>
+        <div class="testi-quote">"{{ t.quote }}"</div>
+        <div class="testi-author">
+          <div class="testi-init">{{ t.initials }}</div>
+          <div>
+            <div class="testi-name">{{ t.name }}</div>
+            <div class="testi-role">{{ t.role }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-sect" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="sect-badge">Get in touch</div>
+      <div class="sect-title">Ready to start<br>your project?</div>
+      <p>Tell us about your project and we'll get back to you within 24 hours with a clear scope and quote. No obligation.</p>
+      <div class="ci-row"><span class="ci-label">Email</span><span class="ci-val">{{ site.email }}</span></div>
+      <div class="ci-row"><span class="ci-label">Phone</span><span class="ci-val">{{ site.phone }}</span></div>
+      <div class="ci-row"><span class="ci-label">Location</span><span class="ci-val">{{ site.address }}</span></div>
+    </div>
+    <div class="contact-right">
+      <div class="form-light">
+        <div class="form-light-title">Send us a message</div>
+        <form class="fl-fields" method="POST" action="{% url 'contact_submit' %}">
+          {% csrf_token %}
+          <input type="hidden" name="source_prototype" value="3">
+          <div class="fl-row-2">
+            <div class="fl-field">
+              <label class="fl-label">Full name</label>
+              <input class="fl-input" type="text" name="name" placeholder="Your name" value="{{ contact_form.name.value|default:'' }}">
+              {% if contact_form.name.errors %}<ul class="errorlist">{% for e in contact_form.name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            <div class="fl-field">
+              <label class="fl-label">Email address</label>
+              <input class="fl-input" type="email" name="email" placeholder="your@email.com" value="{{ contact_form.email.value|default:'' }}">
+              {% if contact_form.email.errors %}<ul class="errorlist">{% for e in contact_form.email.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+          </div>
+          <div class="fl-row-2">
+            <div class="fl-field">
+              <label class="fl-label">Phone (optional)</label>
+              <input class="fl-input" type="text" name="phone" placeholder="+263 ..." value="{{ contact_form.phone.value|default:'' }}">
+            </div>
+            <div class="fl-field">
+              <label class="fl-label">Service required</label>
+              <select class="fl-select" name="project_type">
+                <option value="">Select a service…</option>
+                <option value="structural_design"{% if contact_form.project_type.value == 'structural_design' %} selected{% endif %}>Structural Design</option>
+                <option value="construction_supervision"{% if contact_form.project_type.value == 'construction_supervision' %} selected{% endif %}>Construction Supervision</option>
+                <option value="building_inspection"{% if contact_form.project_type.value == 'building_inspection' %} selected{% endif %}>Building Inspection</option>
+                <option value="foundation_engineering"{% if contact_form.project_type.value == 'foundation_engineering' %} selected{% endif %}>Foundation Engineering</option>
+                <option value="steel_frame_design"{% if contact_form.project_type.value == 'steel_frame_design' %} selected{% endif %}>Steel Frame Design</option>
+                <option value="compliance_report"{% if contact_form.project_type.value == 'compliance_report' %} selected{% endif %}>Reports &amp; Compliance</option>
+                <option value="other"{% if contact_form.project_type.value == 'other' %} selected{% endif %}>Other / Not sure yet</option>
+              </select>
+              {% if contact_form.project_type.errors %}<ul class="errorlist">{% for e in contact_form.project_type.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+          </div>
+          <div class="fl-field">
+            <label class="fl-label">Your message</label>
+            <textarea class="fl-input fl-textarea" name="message" placeholder="Tell us about your project…">{{ contact_form.message.value|default:'' }}</textarea>
+            {% if contact_form.message.errors %}<ul class="errorlist">{% for e in contact_form.message.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          </div>
+          <button type="submit" class="fl-submit">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a class="ft-logo" href="#">Struq<em>t</em>on</a>
+        <p>Structural engineering solutions for Zimbabwe's built environment. Registered, reliable, results-driven.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Services</h4>
+        <ul>
+          {% for service in site.services %}
+          <li><a href="#services">{{ service.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="{% url 'index' %}">All Prototypes</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li><a href="tel:{{ site.phone }}">{{ site.phone }}</a></li>
+          <li><span style="color:rgba(255,255,255,0.55)">{{ site.address }}</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>&copy; 2024 {{ site.company_name }}. All rights reserved.</p>
+      <p>{{ site.website }}</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

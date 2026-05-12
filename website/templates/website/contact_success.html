@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ page_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green:#1db983;--green-dim:rgba(29,185,131,0.1);--green-border:rgba(29,185,131,0.25);
+      --bg:#0a0c10;--bg2:#0f1218;--border:rgba(255,255,255,0.08);
+      --text:#dde4ec;--muted:rgba(221,228,236,0.55);
+      --font:'Space Grotesk',sans-serif;
+    }
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+    nav{padding:32px 64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .logo{font-size:18px;font-weight:700;color:#fff;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase}
+    .logo em{color:var(--green);font-style:normal}
+    .logo-sub{display:block;font-size:7px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);font-weight:400;text-transform:uppercase;margin-top:2px}
+    main{flex:1;display:flex;align-items:center;justify-content:center;padding:64px 32px}
+    .success-box{max-width:560px;width:100%;text-align:center}
+    .check-ring{width:80px;height:80px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green-border);display:flex;align-items:center;justify-content:center;margin:0 auto 32px;animation:popIn .5s ease both}
+    @keyframes popIn{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+    .check-icon{width:32px;height:32px;color:var(--green)}
+    .success-label{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+    .success-heading{font-size:clamp(28px,5vw,44px);font-weight:700;color:#fff;letter-spacing:-0.02em;line-height:1.1;margin-bottom:16px}
+    .success-body{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:40px}
+    .success-divider{border:none;border-top:1px solid var(--border);margin:0 auto 40px;max-width:200px}
+    .success-detail{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:40px;text-align:left}
+    .sd-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+    .sd-row:last-child{border-bottom:none;padding-bottom:0}
+    .sd-row:first-child{padding-top:0}
+    .sd-icon{font-size:16px;flex-shrink:0;margin-top:2px}
+    .sd-text{font-size:14px;color:var(--muted);line-height:1.6}
+    .sd-text strong{color:var(--text);font-weight:600}
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-green{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#000;background:var(--green);padding:14px 28px;text-decoration:none;border-radius:4px;transition:background .2s}
+    .btn-green:hover{background:#22d497}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:14px 28px;text-decoration:none;border-radius:4px;transition:all .2s}
+    .btn-outline:hover{color:#fff;border-color:rgba(255,255,255,0.3)}
+    footer{padding:24px 64px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+    footer p{font-size:11px;color:rgba(255,255,255,0.25)}
+    @media(max-width:640px){
+      nav{padding:24px 20px}
+      main{padding:48px 20px}
+      footer{padding:20px;flex-direction:column;gap:8px;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="{% url 'index' %}">Struq<em>t</em>on<span class="logo-sub">Structural Engineering</span></a>
+  <a class="btn-outline" href="{% url 'index' %}">← View Prototypes</a>
+</nav>
+
+<main>
+  <div class="success-box">
+
+    <div class="check-ring">
+      <svg class="check-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="5 16 13 24 27 8"/>
+      </svg>
+    </div>
+
+    <div class="success-label">Message received</div>
+    <h1 class="success-heading">Thank you for<br>getting in touch</h1>
+    <p class="success-body">We've received your enquiry and will review it shortly. A member of our team will be in touch within 24 hours to discuss your project.</p>
+
+    <hr class="success-divider"/>
+
+    <div class="success-detail">
+      <div class="sd-row">
+        <span class="sd-icon">⏱</span>
+        <div class="sd-text"><strong>Response time</strong><br>We aim to respond to all enquiries within 24 hours on business days.</div>
+      </div>
+      <div class="sd-row">
+        <span class="sd-icon">📧</span>
+        <div class="sd-text"><strong>Email copy</strong><br>You'll receive a confirmation to your email address. Check your spam folder if it doesn't arrive.</div>
+      </div>
+      <div class="sd-row">
+        <span class="sd-icon">📞</span>
+        <div class="sd-text"><strong>Urgent enquiries</strong><br>For time-sensitive projects, contact us directly at <strong>{{ site.email }}</strong> or <strong>{{ site.phone }}</strong>.</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn-green" href="{% url 'index' %}">View all prototypes</a>
+      <a class="btn-outline" href="mailto:{{ site.email }}">Send another email</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 {{ site.company_name }}. All rights reserved.</p>
+  <p>{{ site.website }}</p>
+</footer>
+
+</body>
+</html>
