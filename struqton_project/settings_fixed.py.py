@@ -1,28 +1,26 @@
 """
 Django settings for the Struqton Structural website project.
+Uses only built-in os.environ — no python-decouple dependency.
 """
 
+import os
 from pathlib import Path
-from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ─────────────────────────────────────────────────────────────
-# SECURITY — pulled from .env (locally) or environment variables (production)
+# SECURITY — pulled from environment variables
 # ─────────────────────────────────────────────────────────────
-SECRET_KEY = config(
+SECRET_KEY = os.environ.get(
     'SECRET_KEY',
-    default='django-insecure-struqton-dev-key-change-in-production-xyz123'
+    'struqton-harare-structural-engineering-2026-secure-key-xyz-789-abc'
 )
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1',
-    cast=Csv()
-)
+_allowed = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = [h.strip() for h in _allowed.split(',') if h.strip()]
 
 # ─────────────────────────────────────────────────────────────
 # Application definition
